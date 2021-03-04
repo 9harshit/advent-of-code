@@ -1380,7 +1380,7 @@ def getparam(mode, i, inp):
 
 
 while inp[i] != 99:
-    """if inp[i] == 3:
+    if inp[i] == 3:
         a = input("Enter System Id : ")
         inp[inp[i + 1]] = a
         i += 2
@@ -1397,7 +1397,7 @@ while inp[i] != 99:
         inp[inp[i + 3]] = int(inp[inp[i + 1]]) * int(inp[inp[i + 2]])
         i += 4"""
 
-    # else:
+"""# else:
     code = str(inp[i])
     if len(code) == 4:
         de = int(code[2:])
@@ -1485,4 +1485,733 @@ while inp[i] != 99:
 
             else:
                 inp[inp[i + 3]] = 0
-                i += 4 """
+                i += 4
+
+ """
+# 6a
+""" class Planet:
+    def __init__(self, name):
+        self.name = name
+        self.parent = None
+        self.child = set()
+
+
+class Galaxy:
+    def __init__(self, orbit):
+        self.galaxy_set = {}
+        for orb in orbit:
+            planet_name, moon_name = self.get_orbit_info(orb)
+
+            if moon_name not in self.galaxy_set:
+                moon = Planet(moon_name)
+                self.galaxy_set[moon_name] = moon
+            else:
+                moon = self.galaxy_set[moon_name]
+
+            if planet_name not in self.galaxy_set:
+                planet = Planet(planet_name)
+                self.galaxy_set[planet_name] = planet
+            else:
+                planet = self.galaxy_set[planet_name]
+
+            moon.parent = planet
+            planet.child.add(moon)
+
+    def get_orbit_info(self, orb):
+        list = orb.split(")")
+        return list[0], list[1]
+
+    def calculate_orbit(self):
+        total_orbit = 0
+
+        for planet in self.galaxy_set.values():
+            while planet.parent:
+                total_orbit += 1
+                planet = planet.parent
+
+        return total_orbit
+
+    def find_santa(self):
+        you = self.galaxy_set["YOU"]
+        san = self.galaxy_set["SAN"]
+        queue = [(you, [you])]
+
+        while queue:
+            (planet, path) = queue.pop(0)
+
+            to_search = set()
+
+            if planet.parent:
+                to_search.add(planet.parent)
+
+            for moon in planet.child:
+                to_search.add(moon)
+
+            to_search = to_search - set(path)
+
+            for next_planet in to_search:
+
+                if next_planet == san:
+                    return len(path) - 2
+                else:
+                    queue.append((next_planet, path + [next_planet]))
+
+        return 0
+
+
+orbit = ""
+planet_file = open("planet.txt", "r")
+
+for i in planet_file:
+    i = i.rstrip("\n")
+    orbit = orbit + ", " + i
+
+
+# orbit = "COM)B, B)C, C)D, D)E, E)F, B)G, G)H, D)I, E)J, J)K, K)L, K)YOU, I)SAN"
+orbit = orbit.split(", ")
+orbit = orbit[1:]
+galaxy = Galaxy(orbit)
+print(galaxy.calculate_orbit())
+print(galaxy.find_santa())
+
+
+
+ """
+
+# 7a
+
+
+data = [
+    3,
+    8,
+    1001,
+    8,
+    10,
+    8,
+    105,
+    1,
+    0,
+    0,
+    21,
+    34,
+    51,
+    64,
+    73,
+    98,
+    179,
+    260,
+    341,
+    422,
+    99999,
+    3,
+    9,
+    102,
+    4,
+    9,
+    9,
+    1001,
+    9,
+    4,
+    9,
+    4,
+    9,
+    99,
+    3,
+    9,
+    1001,
+    9,
+    4,
+    9,
+    1002,
+    9,
+    3,
+    9,
+    1001,
+    9,
+    5,
+    9,
+    4,
+    9,
+    99,
+    3,
+    9,
+    101,
+    5,
+    9,
+    9,
+    102,
+    5,
+    9,
+    9,
+    4,
+    9,
+    99,
+    3,
+    9,
+    101,
+    5,
+    9,
+    9,
+    4,
+    9,
+    99,
+    3,
+    9,
+    1002,
+    9,
+    5,
+    9,
+    1001,
+    9,
+    3,
+    9,
+    102,
+    2,
+    9,
+    9,
+    101,
+    5,
+    9,
+    9,
+    1002,
+    9,
+    2,
+    9,
+    4,
+    9,
+    99,
+    3,
+    9,
+    1001,
+    9,
+    1,
+    9,
+    4,
+    9,
+    3,
+    9,
+    1002,
+    9,
+    2,
+    9,
+    4,
+    9,
+    3,
+    9,
+    1001,
+    9,
+    2,
+    9,
+    4,
+    9,
+    3,
+    9,
+    1001,
+    9,
+    2,
+    9,
+    4,
+    9,
+    3,
+    9,
+    102,
+    2,
+    9,
+    9,
+    4,
+    9,
+    3,
+    9,
+    102,
+    2,
+    9,
+    9,
+    4,
+    9,
+    3,
+    9,
+    101,
+    1,
+    9,
+    9,
+    4,
+    9,
+    3,
+    9,
+    101,
+    1,
+    9,
+    9,
+    4,
+    9,
+    3,
+    9,
+    102,
+    2,
+    9,
+    9,
+    4,
+    9,
+    3,
+    9,
+    101,
+    2,
+    9,
+    9,
+    4,
+    9,
+    99,
+    3,
+    9,
+    101,
+    1,
+    9,
+    9,
+    4,
+    9,
+    3,
+    9,
+    1001,
+    9,
+    1,
+    9,
+    4,
+    9,
+    3,
+    9,
+    102,
+    2,
+    9,
+    9,
+    4,
+    9,
+    3,
+    9,
+    102,
+    2,
+    9,
+    9,
+    4,
+    9,
+    3,
+    9,
+    101,
+    2,
+    9,
+    9,
+    4,
+    9,
+    3,
+    9,
+    101,
+    1,
+    9,
+    9,
+    4,
+    9,
+    3,
+    9,
+    101,
+    1,
+    9,
+    9,
+    4,
+    9,
+    3,
+    9,
+    1002,
+    9,
+    2,
+    9,
+    4,
+    9,
+    3,
+    9,
+    1002,
+    9,
+    2,
+    9,
+    4,
+    9,
+    3,
+    9,
+    1001,
+    9,
+    2,
+    9,
+    4,
+    9,
+    99,
+    3,
+    9,
+    101,
+    2,
+    9,
+    9,
+    4,
+    9,
+    3,
+    9,
+    102,
+    2,
+    9,
+    9,
+    4,
+    9,
+    3,
+    9,
+    1001,
+    9,
+    2,
+    9,
+    4,
+    9,
+    3,
+    9,
+    1001,
+    9,
+    2,
+    9,
+    4,
+    9,
+    3,
+    9,
+    1001,
+    9,
+    2,
+    9,
+    4,
+    9,
+    3,
+    9,
+    101,
+    2,
+    9,
+    9,
+    4,
+    9,
+    3,
+    9,
+    1001,
+    9,
+    1,
+    9,
+    4,
+    9,
+    3,
+    9,
+    102,
+    2,
+    9,
+    9,
+    4,
+    9,
+    3,
+    9,
+    102,
+    2,
+    9,
+    9,
+    4,
+    9,
+    3,
+    9,
+    101,
+    2,
+    9,
+    9,
+    4,
+    9,
+    99,
+    3,
+    9,
+    1002,
+    9,
+    2,
+    9,
+    4,
+    9,
+    3,
+    9,
+    102,
+    2,
+    9,
+    9,
+    4,
+    9,
+    3,
+    9,
+    1001,
+    9,
+    2,
+    9,
+    4,
+    9,
+    3,
+    9,
+    1002,
+    9,
+    2,
+    9,
+    4,
+    9,
+    3,
+    9,
+    1001,
+    9,
+    2,
+    9,
+    4,
+    9,
+    3,
+    9,
+    1002,
+    9,
+    2,
+    9,
+    4,
+    9,
+    3,
+    9,
+    102,
+    2,
+    9,
+    9,
+    4,
+    9,
+    3,
+    9,
+    102,
+    2,
+    9,
+    9,
+    4,
+    9,
+    3,
+    9,
+    101,
+    2,
+    9,
+    9,
+    4,
+    9,
+    3,
+    9,
+    1001,
+    9,
+    2,
+    9,
+    4,
+    9,
+    99,
+    3,
+    9,
+    1001,
+    9,
+    1,
+    9,
+    4,
+    9,
+    3,
+    9,
+    101,
+    1,
+    9,
+    9,
+    4,
+    9,
+    3,
+    9,
+    1002,
+    9,
+    2,
+    9,
+    4,
+    9,
+    3,
+    9,
+    1001,
+    9,
+    2,
+    9,
+    4,
+    9,
+    3,
+    9,
+    1001,
+    9,
+    1,
+    9,
+    4,
+    9,
+    3,
+    9,
+    101,
+    1,
+    9,
+    9,
+    4,
+    9,
+    3,
+    9,
+    102,
+    2,
+    9,
+    9,
+    4,
+    9,
+    3,
+    9,
+    1001,
+    9,
+    2,
+    9,
+    4,
+    9,
+    3,
+    9,
+    1002,
+    9,
+    2,
+    9,
+    4,
+    9,
+    3,
+    9,
+    1001,
+    9,
+    2,
+    9,
+    4,
+    9,
+    99,
+]
+
+# data = [3, 15, 3, 16, 1002, 16, 10, 16, 1, 16, 15, 15, 4, 15, 99, 0, 0]
+i = 0
+
+
+def getparam(mode, i, inp):
+    if mode == 1:
+        return int(inp[i])
+    if mode == 0:
+        return int(inp[inp[i]])
+
+
+max_thrust = 0
+max_signal = 0
+import itertools
+
+signal = [0, 1, 2, 3, 4]
+for signal in itertools.permutations(range(5), 5):
+    input_to_passed = 0
+    signal_activate = 1
+    i = 0
+    for s in signal:
+        i = 0
+        inp = data.copy()
+
+        while inp[i] != 99:
+
+            # else:
+            code = inp[i].__str__()
+            if len(code) == 4:
+                de = int(code[2:])
+                c = int(code[1])
+                b = int(code[0])
+
+            if len(code) == 3:
+                de = int(code[1:])
+                c = int(code[0])
+                b = 0
+
+            if len(code) == 2:
+                de = int(code)
+                c, b = 0, 0
+
+            if len(code) == 1:
+                de = int(code)
+                c, b = 0, 0
+
+            if 1 <= de <= 2:
+
+                param1 = getparam(c, i + 1, inp)
+                param2 = getparam(b, i + 2, inp)
+
+                if de == 1:
+
+                    inp[inp[i + 3]] = param1 + param2
+                    i += 4
+
+                if de == 2:
+                    inp[inp[i + 3]] = param1 * param2
+                    i += 4
+
+            if 3 <= de <= 4:
+
+                if de == 3:
+                    if signal_activate == 2:
+                        a = input_to_passed
+                    else:
+                        a = s
+                        # a = input("Enter System Id : ")
+                    print(a)
+                    inp[inp[i + 1]] = a
+                    i += 2
+
+                if de == 4:
+                    param1 = getparam(c, i + 1, inp)
+                    print("Output : ", inp[inp[i + 1]])
+
+                    input_to_passed = int(inp[inp[i + 1]])
+                    signal_activate = 0
+                    i += 2
+
+            if 5 <= de <= 8:
+
+                if de == 5:
+                    param1 = getparam(c, i + 1, inp)
+                    param2 = getparam(b, i + 2, inp)
+
+                    if param1 != 0:
+                        i = param2
+                    else:
+                        i += 3
+
+                if de == 6:
+                    param1 = getparam(c, i + 1, inp)
+                    param2 = getparam(b, i + 2, inp)
+
+                    if param1 == 0:
+                        i = param2
+                    else:
+                        i += 3
+
+                if de == 7:
+                    param1 = getparam(c, i + 1, inp)
+                    param2 = getparam(b, i + 2, inp)
+
+                    if param1 < param2:
+                        inp[inp[i + 3]] = 1
+                        i += 4
+
+                    else:
+                        inp[inp[i + 3]] = 0
+                        i += 4
+
+                if de == 8:
+                    param1 = getparam(c, i + 1, inp)
+                    param2 = getparam(b, i + 2, inp)
+
+                    if param1 == param2:
+                        inp[inp[i + 3]] = 1
+                        i += 4
+
+                    else:
+                        inp[inp[i + 3]] = 0
+                        i += 4
+            signal_activate += 1
+
+    if max_thrust < input_to_passed:
+        max_thrust = input_to_passed
+        max_signal = signal
