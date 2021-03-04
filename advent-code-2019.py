@@ -2087,8 +2087,8 @@ data = [
     99,
 ]
 
-# data = [3, 15, 3, 16, 1002, 16, 10, 16, 1, 16, 15, 15, 4, 15, 99, 0, 0]
-i = 0
+
+# i = 0
 
 
 def getparam(mode, i, inp):
@@ -2102,116 +2102,277 @@ max_thrust = 0
 max_signal = 0
 import itertools
 
-signal = [0, 1, 2, 3, 4]
-for signal in itertools.permutations(range(5), 5):
-    input_to_passed = 0
-    signal_activate = 1
-    i = 0
-    for s in signal:
-        i = 0
-        inp = data.copy()
 
-        while inp[i] != 99:
+# signal = [9, 8, 7, 6, 5]
+# for signal in itertools.permutations(range(5, 10), 5):
+# input_to_passed = 0
+# signal_activate = 1
+# i = 0
 
-            # else:
-            code = inp[i].__str__()
-            if len(code) == 4:
-                de = int(code[2:])
-                c = int(code[1])
-                b = int(code[0])
+# for s in signal:
+#     i = 0
+#     inp = data.copy()
+#     signal_activate = 1
+#     while inp[i] != 99:
 
-            if len(code) == 3:
-                de = int(code[1:])
-                c = int(code[0])
-                b = 0
+#         # else:
+#         code = inp[i].__str__()
+#         if len(code) == 4:
+#             de = int(code[2:])
+#             c = int(code[1])
+#             b = int(code[0])
 
-            if len(code) == 2:
-                de = int(code)
-                c, b = 0, 0
+#         if len(code) == 3:
+#             de = int(code[1:])
+#             c = int(code[0])
+#             b = 0
 
-            if len(code) == 1:
-                de = int(code)
-                c, b = 0, 0
+#         if len(code) == 2:
+#             de = int(code)
+#             c, b = 0, 0
 
-            if 1 <= de <= 2:
+#         if len(code) == 1:
+#             de = int(code)
+#             c, b = 0, 0
 
+#         if 1 <= de <= 2:
+
+#             param1 = getparam(c, i + 1, inp)
+#             param2 = getparam(b, i + 2, inp)
+
+#             if de == 1:
+
+#                 inp[inp[i + 3]] = param1 + param2
+#                 i += 4
+
+#             if de == 2:
+#                 inp[inp[i + 3]] = param1 * param2
+#                 i += 4
+
+#         if 3 <= de <= 4:
+
+#             if de == 3:
+#                 if signal_activate != 1:
+#                     a = input_to_passed
+#                 else:
+#                     a = s
+#                     # a = input("Enter System Id : ")
+#                 print(a)
+#                 signal_activate += 1
+#                 inp[inp[i + 1]] = a
+#                 i += 2
+
+#             if de == 4:
+#                 param1 = getparam(c, i + 1, inp)
+#                 print("Output : ", inp[inp[i + 1]])
+
+#                 input_to_passed = int(inp[inp[i + 1]])
+#                 i += 2
+
+#         if 5 <= de <= 8:
+
+#             if de == 5:
+#                 param1 = getparam(c, i + 1, inp)
+#                 param2 = getparam(b, i + 2, inp)
+
+#                 if param1 != 0:
+#                     i = param2
+#                 else:
+#                     i += 3
+
+#             if de == 6:
+#                 param1 = getparam(c, i + 1, inp)
+#                 param2 = getparam(b, i + 2, inp)
+
+#                 if param1 == 0:
+#                     i = param2
+#                 else:
+#                     i += 3
+
+#             if de == 7:
+#                 param1 = getparam(c, i + 1, inp)
+#                 param2 = getparam(b, i + 2, inp)
+
+#                 if param1 < param2:
+#                     inp[inp[i + 3]] = 1
+#                     i += 4
+
+#                 else:
+#                     inp[inp[i + 3]] = 0
+#                     i += 4
+
+#             if de == 8:
+#                 param1 = getparam(c, i + 1, inp)
+#                 param2 = getparam(b, i + 2, inp)
+
+#                 if param1 == param2:
+#                     inp[inp[i + 3]] = 1
+#                     i += 4
+
+#                 else:
+#                     inp[inp[i + 3]] = 0
+#                     i += 4
+
+# if max_thrust < input_to_passed:
+#     max_thrust = input_to_passed
+#     max_signal = signal
+
+
+# 7b
+
+
+""" def amplifier(input_to_passed, s, inp, i, signal_activate):
+
+    while inp[i] != 99:
+
+        # else:
+        code = inp[i].__str__()
+        if len(code) == 4:
+            de = int(code[2:])
+            c = int(code[1])
+            b = int(code[0])
+
+        if len(code) == 3:
+            de = int(code[1:])
+            c = int(code[0])
+            b = 0
+
+        if len(code) == 2:
+            de = int(code)
+            c, b = 0, 0
+
+        if len(code) == 1:
+            de = int(code)
+            c, b = 0, 0
+
+        if 1 <= de <= 2:
+
+            param1 = getparam(c, i + 1, inp)
+            param2 = getparam(b, i + 2, inp)
+
+            if de == 1:
+
+                inp[inp[i + 3]] = param1 + param2
+                i += 4
+
+            if de == 2:
+                inp[inp[i + 3]] = param1 * param2
+                i += 4
+
+        if 3 <= de <= 4:
+
+            if de == 3:
+                if signal_activate != 1:
+                    a = input_to_passed
+                else:
+                    a = s
+                    # a = input("Enter System Id : ")
+                print(a)
+                signal_activate += 1
+                inp[inp[i + 1]] = a
+                i += 2
+
+            if de == 4:
+                param1 = getparam(c, i + 1, inp)
+                print("Output : ", inp[inp[i + 1]])
+
+                input_to_passed = int(inp[inp[i + 1]])
+                i += 2
+                return input_to_passed, False, inp, i, signal_activate
+
+        if 5 <= de <= 8:
+
+            if de == 5:
                 param1 = getparam(c, i + 1, inp)
                 param2 = getparam(b, i + 2, inp)
 
-                if de == 1:
+                if param1 != 0:
+                    i = param2
+                else:
+                    i += 3
 
-                    inp[inp[i + 3]] = param1 + param2
+            if de == 6:
+                param1 = getparam(c, i + 1, inp)
+                param2 = getparam(b, i + 2, inp)
+
+                if param1 == 0:
+                    i = param2
+                else:
+                    i += 3
+
+            if de == 7:
+                param1 = getparam(c, i + 1, inp)
+                param2 = getparam(b, i + 2, inp)
+
+                if param1 < param2:
+                    inp[inp[i + 3]] = 1
                     i += 4
 
-                if de == 2:
-                    inp[inp[i + 3]] = param1 * param2
+                else:
+                    inp[inp[i + 3]] = 0
                     i += 4
 
-            if 3 <= de <= 4:
+            if de == 8:
+                param1 = getparam(c, i + 1, inp)
+                param2 = getparam(b, i + 2, inp)
 
-                if de == 3:
-                    if signal_activate == 2:
-                        a = input_to_passed
-                    else:
-                        a = s
-                        # a = input("Enter System Id : ")
-                    print(a)
-                    inp[inp[i + 1]] = a
-                    i += 2
+                if param1 == param2:
+                    inp[inp[i + 3]] = 1
+                    i += 4
 
-                if de == 4:
-                    param1 = getparam(c, i + 1, inp)
-                    print("Output : ", inp[inp[i + 1]])
+                else:
+                    inp[inp[i + 3]] = 0
+                    i += 4
 
-                    input_to_passed = int(inp[inp[i + 1]])
-                    signal_activate = 0
-                    i += 2
+    return input_to_passed, True, inp, i, signal_activate
 
-            if 5 <= de <= 8:
 
-                if de == 5:
-                    param1 = getparam(c, i + 1, inp)
-                    param2 = getparam(b, i + 2, inp)
+max_thrust = 0
+max_signal = 0
+# signal = [9, 7, 8, 5, 6]
 
-                    if param1 != 0:
-                        i = param2
-                    else:
-                        i += 3
+for signal in itertools.permutations(range(5, 10), 5):
+    doneE = False
+    input_to_passed = 0
 
-                if de == 6:
-                    param1 = getparam(c, i + 1, inp)
-                    param2 = getparam(b, i + 2, inp)
+    iA, iB, iC, iD, iE = 0, 0, 0, 0, 0
+    inpA, inpB, inpC, inpD, inpE = (
+        data.copy(),
+        data.copy(),
+        data.copy(),
+        data.copy(),
+        data.copy(),
+    )
 
-                    if param1 == 0:
-                        i = param2
-                    else:
-                        i += 3
+    (
+        signal_activateA,
+        signal_activateB,
+        signal_activateC,
+        signal_activateD,
+        signal_activateE,
+    ) = (1, 1, 1, 1, 1)
 
-                if de == 7:
-                    param1 = getparam(c, i + 1, inp)
-                    param2 = getparam(b, i + 2, inp)
+    while not doneE:
+        input_to_passed, doneA, inpA, iA, signal_activateA = amplifier(
+            input_to_passed, signal[0], inpA, iA, signal_activateA
+        )
 
-                    if param1 < param2:
-                        inp[inp[i + 3]] = 1
-                        i += 4
+        input_to_passed, doneB, inpB, iB, signal_activateB = amplifier(
+            input_to_passed, signal[1], inpB, iB, signal_activateB
+        )
 
-                    else:
-                        inp[inp[i + 3]] = 0
-                        i += 4
+        input_to_passed, doneC, inpC, iC, signal_activateC = amplifier(
+            input_to_passed, signal[2], inpC, iC, signal_activateC
+        )
 
-                if de == 8:
-                    param1 = getparam(c, i + 1, inp)
-                    param2 = getparam(b, i + 2, inp)
+        input_to_passed, doneD, inpD, iD, signal_activateD = amplifier(
+            input_to_passed, signal[3], inpD, iD, signal_activateD
+        )
 
-                    if param1 == param2:
-                        inp[inp[i + 3]] = 1
-                        i += 4
-
-                    else:
-                        inp[inp[i + 3]] = 0
-                        i += 4
-            signal_activate += 1
-
+        input_to_passed, doneE, inpE, iE, signal_activateE = amplifier(
+            input_to_passed, signal[4], inpE, iE, signal_activateE
+        )
     if max_thrust < input_to_passed:
         max_thrust = input_to_passed
         max_signal = signal
+ """
