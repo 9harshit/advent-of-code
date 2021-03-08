@@ -3586,3 +3586,1078 @@ while input_extnd[i] != 99:
                     input_extnd[input_extnd[i + 3]] = 0
                 i += 4
  """
+# 10a
+""" from collections import OrderedDict
+
+input_file = open("input10.txt")
+
+input = []
+for i in input_file:
+    input.append(i.replace("\n", ""))
+
+row = len(input)
+col = len(input[0])
+cor_asteroid = OrderedDict()
+los = {}
+slope_seen = set()
+
+index = 0
+for i in range(row):
+    for j in range(col):
+        if input[i][j] == "#":
+            k = str((j, i))
+            cor_asteroid[index] = (j, i)
+            los[k] = 0
+            index += 1
+
+slope_from_base = set()
+max_asteroid = float("-inf")
+max_slope_all = set()
+slope_all = OrderedDict()
+
+
+for i in cor_asteroid.values():
+    for j in cor_asteroid.values():
+        if i == j:
+            continue
+        else:
+
+            x = j[0] - i[0]
+            y = j[1] - i[1]
+            if j[0] > i[0]:
+                direction = "L"
+            else:
+                direction = "R"
+
+            if j[1] > i[1]:
+                direction = direction + "D"
+            else:
+                direction = direction + "U"
+
+            if x == 0 and "U" in direction:
+                slope = "undefined"
+            elif x == 0 and "D" in direction:
+                slope = "-undefined"
+            else:
+                slope = y / x
+
+            if (slope, direction) not in slope_seen:
+                slope_seen.add((slope, direction))
+                k = str(i)
+                los[k] += 1
+
+            l = str(j)
+            slope_all[l] = slope, direction
+
+    if los[str(i)] > max_asteroid:
+        base_asteroid = i
+
+        slope_from_base.clear()
+        max_slope_all.clear()
+
+        slope_from_base = slope_seen.copy()
+        max_slope_all = slope_all.copy()
+        max_asteroid = los[str(i)]
+
+    slope_seen.clear()
+
+
+# 10b
+import math
+
+laser_cor = base_asteroid
+# print(max_slope_all)
+# print(slope_from_base)
+
+
+all_angle_from_base = {}
+angle_from_base = set()
+run = 0
+
+for i in slope_from_base:
+    if i[0] == "undefined" and "U" in i[1]:
+        angle_from_base.add(-90)
+        run += 1
+
+    elif i[0] == "-undefined" and "D" in i[1]:
+        angle_from_base.add(90)
+        run += 1
+    elif i[1] not in ["LD", "LU"]:
+        angle_from_base.add(180 + math.degrees(math.atan(i[0])))
+        run += 1
+    else:
+        angle_from_base.add(math.degrees(math.atan(i[0])))
+        run += 1
+
+
+# print(angle_from_base)
+
+for i in max_slope_all:
+    if max_slope_all[i][0] == "undefined":
+        all_angle_from_base[i] = -90
+    elif max_slope_all[i][0] == "-undefined":
+        all_angle_from_base[i] = 90
+    elif max_slope_all[i][1] not in ["LD", "LU"]:
+        all_angle_from_base[i] = 180 + math.degrees(math.atan(max_slope_all[i][0]))
+    else:
+        all_angle_from_base[i] = math.degrees(math.atan(max_slope_all[i][0]))
+
+angle_from_base = sorted(angle_from_base)
+
+sorted_angle = [
+    (angle, point)
+    for angle, point in sorted(
+        all_angle_from_base.items(),
+        key=lambda all_angle_from_base: all_angle_from_base[1],
+    )
+]
+destroyed = 0
+
+def string_to_set(x):
+    value1 = ""
+    value2 = ""
+
+    index = 0
+
+    for i in x[1:]:
+        if i != ",":
+            value1 = value1 + i
+            index += 1
+        else:
+            break
+
+    for i in range(index + 2, len(x) - 1):
+        value2 = value2 + x[i]
+    return (int(value1), int(value2))
+
+
+sorted_angle.remove((str(laser_cor), 0))
+
+while sorted_angle:
+    for i in angle_from_base:
+
+        targets_top = [x for x in sorted_angle if x[1] == i]
+        target = None
+
+        min_dis = float("inf")
+        for x in targets_top:
+
+            x = string_to_set(x[0])
+            dis = math.dist(x, base_asteroid)
+            if dis < min_dis:
+                target = x
+                min_dis = dis
+
+        if target != laser_cor and target:
+            destroyed += 1
+            print("Destroyed at:", destroyed, "Asteroid : ", str(target), i)
+            sorted_angle.remove((str(target), i))
+
+        if destroyed == 200:
+            print("200th : ", target) """
+
+inp = [
+    3,
+    8,
+    1005,
+    8,
+    329,
+    1106,
+    0,
+    11,
+    0,
+    0,
+    0,
+    104,
+    1,
+    104,
+    0,
+    3,
+    8,
+    102,
+    -1,
+    8,
+    10,
+    1001,
+    10,
+    1,
+    10,
+    4,
+    10,
+    1008,
+    8,
+    0,
+    10,
+    4,
+    10,
+    1002,
+    8,
+    1,
+    29,
+    2,
+    1102,
+    1,
+    10,
+    1,
+    1009,
+    16,
+    10,
+    2,
+    4,
+    4,
+    10,
+    1,
+    9,
+    5,
+    10,
+    3,
+    8,
+    1002,
+    8,
+    -1,
+    10,
+    101,
+    1,
+    10,
+    10,
+    4,
+    10,
+    108,
+    0,
+    8,
+    10,
+    4,
+    10,
+    101,
+    0,
+    8,
+    66,
+    2,
+    106,
+    7,
+    10,
+    1006,
+    0,
+    49,
+    3,
+    8,
+    1002,
+    8,
+    -1,
+    10,
+    101,
+    1,
+    10,
+    10,
+    4,
+    10,
+    108,
+    1,
+    8,
+    10,
+    4,
+    10,
+    1002,
+    8,
+    1,
+    95,
+    1006,
+    0,
+    93,
+    3,
+    8,
+    102,
+    -1,
+    8,
+    10,
+    1001,
+    10,
+    1,
+    10,
+    4,
+    10,
+    108,
+    1,
+    8,
+    10,
+    4,
+    10,
+    102,
+    1,
+    8,
+    120,
+    1006,
+    0,
+    61,
+    2,
+    1108,
+    19,
+    10,
+    2,
+    1003,
+    2,
+    10,
+    1006,
+    0,
+    99,
+    3,
+    8,
+    1002,
+    8,
+    -1,
+    10,
+    1001,
+    10,
+    1,
+    10,
+    4,
+    10,
+    1008,
+    8,
+    0,
+    10,
+    4,
+    10,
+    101,
+    0,
+    8,
+    157,
+    3,
+    8,
+    102,
+    -1,
+    8,
+    10,
+    1001,
+    10,
+    1,
+    10,
+    4,
+    10,
+    1008,
+    8,
+    1,
+    10,
+    4,
+    10,
+    1001,
+    8,
+    0,
+    179,
+    2,
+    1108,
+    11,
+    10,
+    1,
+    1102,
+    19,
+    10,
+    3,
+    8,
+    102,
+    -1,
+    8,
+    10,
+    1001,
+    10,
+    1,
+    10,
+    4,
+    10,
+    1008,
+    8,
+    1,
+    10,
+    4,
+    10,
+    101,
+    0,
+    8,
+    209,
+    2,
+    108,
+    20,
+    10,
+    3,
+    8,
+    1002,
+    8,
+    -1,
+    10,
+    101,
+    1,
+    10,
+    10,
+    4,
+    10,
+    108,
+    1,
+    8,
+    10,
+    4,
+    10,
+    101,
+    0,
+    8,
+    234,
+    3,
+    8,
+    102,
+    -1,
+    8,
+    10,
+    101,
+    1,
+    10,
+    10,
+    4,
+    10,
+    108,
+    0,
+    8,
+    10,
+    4,
+    10,
+    1002,
+    8,
+    1,
+    256,
+    2,
+    1102,
+    1,
+    10,
+    1006,
+    0,
+    69,
+    2,
+    108,
+    6,
+    10,
+    2,
+    4,
+    13,
+    10,
+    3,
+    8,
+    102,
+    -1,
+    8,
+    10,
+    101,
+    1,
+    10,
+    10,
+    4,
+    10,
+    1008,
+    8,
+    0,
+    10,
+    4,
+    10,
+    1002,
+    8,
+    1,
+    294,
+    1,
+    1107,
+    9,
+    10,
+    1006,
+    0,
+    87,
+    2,
+    1006,
+    8,
+    10,
+    2,
+    1001,
+    16,
+    10,
+    101,
+    1,
+    9,
+    9,
+    1007,
+    9,
+    997,
+    10,
+    1005,
+    10,
+    15,
+    99,
+    109,
+    651,
+    104,
+    0,
+    104,
+    1,
+    21101,
+    387395195796,
+    0,
+    1,
+    21101,
+    346,
+    0,
+    0,
+    1105,
+    1,
+    450,
+    21101,
+    0,
+    48210129704,
+    1,
+    21101,
+    0,
+    357,
+    0,
+    1105,
+    1,
+    450,
+    3,
+    10,
+    104,
+    0,
+    104,
+    1,
+    3,
+    10,
+    104,
+    0,
+    104,
+    0,
+    3,
+    10,
+    104,
+    0,
+    104,
+    1,
+    3,
+    10,
+    104,
+    0,
+    104,
+    1,
+    3,
+    10,
+    104,
+    0,
+    104,
+    0,
+    3,
+    10,
+    104,
+    0,
+    104,
+    1,
+    21101,
+    0,
+    46413147328,
+    1,
+    21102,
+    404,
+    1,
+    0,
+    1106,
+    0,
+    450,
+    21102,
+    179355823323,
+    1,
+    1,
+    21101,
+    415,
+    0,
+    0,
+    1105,
+    1,
+    450,
+    3,
+    10,
+    104,
+    0,
+    104,
+    0,
+    3,
+    10,
+    104,
+    0,
+    104,
+    0,
+    21102,
+    1,
+    838345843476,
+    1,
+    21101,
+    0,
+    438,
+    0,
+    1105,
+    1,
+    450,
+    21101,
+    709475709716,
+    0,
+    1,
+    21101,
+    449,
+    0,
+    0,
+    1105,
+    1,
+    450,
+    99,
+    109,
+    2,
+    22102,
+    1,
+    -1,
+    1,
+    21102,
+    40,
+    1,
+    2,
+    21101,
+    0,
+    481,
+    3,
+    21101,
+    0,
+    471,
+    0,
+    1105,
+    1,
+    514,
+    109,
+    -2,
+    2105,
+    1,
+    0,
+    0,
+    1,
+    0,
+    0,
+    1,
+    109,
+    2,
+    3,
+    10,
+    204,
+    -1,
+    1001,
+    476,
+    477,
+    492,
+    4,
+    0,
+    1001,
+    476,
+    1,
+    476,
+    108,
+    4,
+    476,
+    10,
+    1006,
+    10,
+    508,
+    1101,
+    0,
+    0,
+    476,
+    109,
+    -2,
+    2106,
+    0,
+    0,
+    0,
+    109,
+    4,
+    2101,
+    0,
+    -1,
+    513,
+    1207,
+    -3,
+    0,
+    10,
+    1006,
+    10,
+    531,
+    21101,
+    0,
+    0,
+    -3,
+    21201,
+    -3,
+    0,
+    1,
+    21201,
+    -2,
+    0,
+    2,
+    21101,
+    1,
+    0,
+    3,
+    21101,
+    550,
+    0,
+    0,
+    1105,
+    1,
+    555,
+    109,
+    -4,
+    2106,
+    0,
+    0,
+    109,
+    5,
+    1207,
+    -3,
+    1,
+    10,
+    1006,
+    10,
+    578,
+    2207,
+    -4,
+    -2,
+    10,
+    1006,
+    10,
+    578,
+    21201,
+    -4,
+    0,
+    -4,
+    1105,
+    1,
+    646,
+    22101,
+    0,
+    -4,
+    1,
+    21201,
+    -3,
+    -1,
+    2,
+    21202,
+    -2,
+    2,
+    3,
+    21101,
+    597,
+    0,
+    0,
+    1105,
+    1,
+    555,
+    22102,
+    1,
+    1,
+    -4,
+    21101,
+    0,
+    1,
+    -1,
+    2207,
+    -4,
+    -2,
+    10,
+    1006,
+    10,
+    616,
+    21101,
+    0,
+    0,
+    -1,
+    22202,
+    -2,
+    -1,
+    -2,
+    2107,
+    0,
+    -3,
+    10,
+    1006,
+    10,
+    638,
+    22102,
+    1,
+    -1,
+    1,
+    21101,
+    638,
+    0,
+    0,
+    106,
+    0,
+    513,
+    21202,
+    -2,
+    -1,
+    -2,
+    22201,
+    -4,
+    -2,
+    -4,
+    109,
+    -5,
+    2106,
+    0,
+    0,
+]
+
+from collections import OrderedDict
+
+panel_painted = OrderedDict()
+robot_face_direction = "UP"
+
+position = (0, 0)
+
+min_x, min_y, max_x, max_y = 0, 0, 0, 0
+
+input_extnd = {}
+
+for key, i in enumerate(inp):
+    input_extnd[key] = i
+
+extend_mem_index = 0
+get_param = 0
+panel_painted = {(0, 0): 1}
+
+
+def getparam(mode, i, input_extnd, base):
+
+    global extend_mem_index
+    if extend_mem_index >= len(inp):
+        extend_mem_index = 0
+
+    if mode == 1:
+
+        if i not in input_extnd:
+            input_extnd[i] = input_extnd[extend_mem_index]
+            extend_mem_index += 1
+        return int(input_extnd[i])
+
+    if mode == 0:
+        if input_extnd[i] not in input_extnd:
+            input_extnd[input_extnd[i]] = input_extnd[extend_mem_index]
+            extend_mem_index += 1
+
+        return int(input_extnd[input_extnd[i]])
+
+    if mode == 2:
+
+        if input_extnd[i] + base not in input_extnd:
+            input_extnd[input_extnd[i] + base] = input_extnd[extend_mem_index]
+            extend_mem_index += 1
+
+        return int(input_extnd[input_extnd[i] + base])
+
+
+base = 0
+i = 0
+
+
+def change_position(position, robot_face_direction, change_direction_to):
+
+    if robot_face_direction == "UP":
+        if change_direction_to == 0:
+            new_robot_face_direction = "LEFT"
+        else:
+            new_robot_face_direction = "RIGHT"
+
+    if robot_face_direction == "DOWN":
+        if change_direction_to == 0:
+            new_robot_face_direction = "RIGHT"
+        else:
+            new_robot_face_direction = "LEFT"
+
+    if robot_face_direction == "LEFT":
+        if change_direction_to == 0:
+            new_robot_face_direction = "DOWN"
+        else:
+            new_robot_face_direction = "UP"
+
+    if robot_face_direction == "RIGHT":
+        if change_direction_to == 0:
+            new_robot_face_direction = "UP"
+        else:
+            new_robot_face_direction = "DOWN"
+
+    if new_robot_face_direction == "UP":
+        new_position = (position[0], position[1] + 1)
+
+    elif new_robot_face_direction == "DOWN":
+        new_position = (position[0], position[1] - 1)
+
+    elif new_robot_face_direction == "LEFT":
+        new_position = (position[0] - 1, position[1])
+
+    else:
+        new_position = (position[0] + 1, position[1])
+
+    return new_position, new_robot_face_direction
+
+
+run = 0
+while input_extnd[i] != 99:
+
+    code = str(input_extnd[i])
+
+    if len(code) == 5:
+        de = int(code[3:])
+        c = int(code[2])
+        b = int(code[1])
+        a = int(code[0])
+
+    if len(code) == 4:
+        de = int(code[2:])
+        c = int(code[1])
+        b = int(code[0])
+        a = 0
+
+    if len(code) == 3:
+        de = int(code[1:])
+        c = int(code[0])
+        a, b = 0, 0
+
+    if len(code) == 2:
+        de = int(code)
+        a, c, b = 0, 0, 0
+
+    if len(code) == 1:
+        de = int(code)
+        a, c, b = 0, 0, 0
+
+    param1 = getparam(c, i + 1, input_extnd, base)
+
+    if de not in [3, 4, 9]:
+        param2 = getparam(b, i + 2, input_extnd, base)
+
+    if 1 <= de <= 2:
+
+        if de == 1:
+
+            if a == 2:
+                input_extnd[input_extnd[i + 3] + base] = param1 + param2
+            else:
+                input_extnd[input_extnd[i + 3]] = param1 + param2
+
+        if de == 2:
+            if a == 2:
+                input_extnd[input_extnd[i + 3] + base] = param1 * param2
+            else:
+
+                input_extnd[input_extnd[i + 3]] = param1 * param2
+
+        i += 4
+
+    if 3 <= de <= 4 or de == 9:
+
+        if de == 3:
+
+            # a = input("Enter System Id : ")
+            if position not in panel_painted:
+                panel_painted[position] = 0
+
+            a = panel_painted[position]
+
+            if c == 2:
+                input_extnd[base + input_extnd[i + 1]] = int(a)
+            else:
+                input_extnd[input_extnd[i + 1]] = int(a)
+
+        if de == 4:
+            get_param += 1
+
+            if get_param == 2:
+                # print("Direction : ", param1)
+                position, robot_face_direction = change_position(
+                    position, robot_face_direction, param1
+                )
+                get_param = 0
+
+                min_x = min(min_x, position[0])
+                min_y = min(min_y, position[1])
+                max_x = max(max_x, position[0])
+                max_y = max(max_y, position[1])
+
+            else:
+                # print("Color : ", param1)
+                panel_painted[position] = param1
+
+            if param1 == 99:
+                break
+
+        if de == 9:
+            base += param1
+
+        i += 2
+
+    if 5 <= de <= 8:
+
+        if de == 5:
+
+            if param1 != 0:
+                i = param2
+            else:
+                i += 3
+
+        if de == 6:
+
+            if param1 == 0:
+                i = param2
+            else:
+                i += 3
+
+        if de == 7:
+
+            if param1 < param2:
+                if a == 2:
+                    input_extnd[input_extnd[i + 3] + base] = 1
+                else:
+                    input_extnd[input_extnd[i + 3]] = 1
+                i += 4
+
+            else:
+                if a == 2:
+                    input_extnd[input_extnd[i + 3] + base] = 0
+                else:
+                    input_extnd[input_extnd[i + 3]] = 0
+                i += 4
+
+        if de == 8:
+
+            if param1 == param2:
+                if a == 2:
+                    input_extnd[input_extnd[i + 3] + base] = 1
+
+                else:
+                    input_extnd[input_extnd[i + 3]] = 1
+                i += 4
+
+            else:
+                if a == 2:
+                    input_extnd[input_extnd[i + 3] + base] = 0
+
+                else:
+                    input_extnd[input_extnd[i + 3]] = 0
+                i += 4
+
+    run += 1
+
+for j in range(max_y, min_y - 1, -1):
+    for i in range(min_x, max_x + 1):
+        if (i, j) not in panel_painted:
+            print(" ", end="")
+        else:
+            if panel_painted[((i, j))] == 0:
+                print(" ", end="")
+            else:
+                print("1", end="")
+
+    print()
