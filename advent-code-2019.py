@@ -5060,7 +5060,7 @@ print(lcm)
 
 # 13a
 
-inp = [
+""" inp = [
     2,
     380,
     379,
@@ -8029,18 +8029,8 @@ while input_extnd[i] != 99:
     if 3 <= de <= 4 or de == 9:
 
         if de == 3:
-            # for col in range(min_y, max_y):
-            #     for row in range(max_x, min_x - 1, -1):
-            #         if str((row, col)) not in game:
-            #             print(" ", end="")
-            #         else:
-            #             print(game[str((row, col))], end="")
 
-            #     print()
-
-            # print()
             # a = input("Enter System Id : ")
-            # display_game(game, score)
             if pos_ball[1] > pos_paddle[1]:
                 joystick = 1
             elif pos_ball[1] < pos_paddle[1]:
@@ -8081,6 +8071,7 @@ while input_extnd[i] != 99:
                     min_y = min(min_y, y)
                     max_y = max(max_y, y)
                     stdscr.addstr(y, x, game[pos])
+                    stdscr.addstr(max_y, 0, "Score : " + str(score))
                     stdscr.refresh()
 
                 game_input = []
@@ -8149,4 +8140,143 @@ while input_extnd[i] != 99:
     run += 1
 
 print(count_block(game))
-print(score)
+"""
+
+# 14a
+
+chemical_reaction = {}
+
+input_file = open("input14.txt", "r")
+
+# 7 A, 1 E => 1 FUEL
+
+
+def parse_reaction(eq):
+    values = []
+    value = ""
+    key = [0, 0]
+    next_is_key = None
+
+    for i in range(len(eq)):
+
+        if eq[i] == ",":
+            continue
+
+        if eq[i] == " ":
+            if value == "=>":
+                next_is_key = 0
+                value = ""
+                continue
+
+            if next_is_key != None:
+                key[next_is_key] = value
+                next_is_key += 1
+
+            else:
+                values.append(value)
+
+            value = ""
+
+        else:
+            value = value + eq[i]
+
+    key[1] = value
+
+    chemical_reaction[key[1]] = [
+        (int(values[i]), values[i + 1]) for i in range(0, len(values) - 1, 2)
+    ]
+    chemical_reaction[key[1]].append(int(key[0]))
+
+
+for i in input_file:
+    parse_reaction(i.strip())
+
+# for i in chemical_reaction:
+#     print(i, ":", chemical_reaction[i])
+
+# TRY memory contains ore used to create one chemcial
+memory_ore_used = {}
+
+excess_ore = {}
+
+# print(chemical_reaction)
+
+
+# 10 ORE => 10 A
+# 1 ORE => 1 B
+# 7 A, 1 B => 1 C
+# 7 A, 1 C => 1 D
+# 7 A, 1 D => 1 E
+# 7 A, 1 E => 1 FUEL
+
+#'A': [(9, 'ORE'), 2]
+
+chemical_excess = {}
+
+
+def find_ore(quantity, chemical):
+
+    global chemical_excess
+
+    if chemical not in chemical_excess:
+        chemical_excess[chemical] = 0
+
+    total_ore = 0
+    produced = 0
+
+    if chemical_reaction[chemical][0][1] == "ORE":
+
+        if quantity <= chemical_excess[chemical]:
+            chemical_excess[chemical] -= quantity
+            return total_ore
+
+        if quantity > chemical_reaction[chemical][1]:
+            while quantity > produced:
+                if quantity <= chemical_excess[chemical] + produced:
+                    break
+                total_ore += chemical_reaction[chemical][0][0]
+                produced += chemical_reaction[chemical][1]
+
+        else:
+            total_ore += chemical_reaction[chemical][0][0]
+            produced += chemical_reaction[chemical][1]
+
+        chemical_excess[chemical] += produced - quantity
+
+        return total_ore
+
+    chemicals = chemical_reaction[chemical]
+
+    while quantity > produced:
+        if quantity <= chemical_excess[chemical] + produced:
+            break
+        for i in range(len(chemicals) - 1):
+            total_ore += find_ore(chemicals[i][0], chemicals[i][1])
+
+        produced += chemical_reaction[chemical][-1]
+
+    chemical_excess[chemical] += produced - quantity
+    return total_ore
+
+
+ore = find_ore(1, "FUEL")
+print("Answer = ", ore)
+
+lower = 1000000000000 // ore
+upper = lower * 2
+
+while True:
+    value = (upper + lower) // 2
+    print(value)
+
+    total_ore = find_ore(value, "FUEL")
+    total_ore1 = find_ore(value + 1, "FUEL")
+
+    if total_ore < 1000000000000 and total_ore1 > 1000000000000:
+        print(value)
+        break
+
+    if total_ore > 1000000000000:
+        upper = value
+    elif total_ore < 1000000000000:
+        lower = value
