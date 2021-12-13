@@ -3,7 +3,7 @@ from utils import Submarine, get_data
 DEBUG = False
 
 
-data = get_data(__file__[-7:-3], DEBUG)
+data = get_data(__file__, DEBUG)
 
 
 def sol_1():

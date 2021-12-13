@@ -11,7 +11,7 @@ def get_data(file_name, DEBUG=False) -> list:
     else:
         FILE_PATH = pathlib.Path("__file__").parent.parent / "question"
 
-    with open(FILE_PATH.joinpath(file_name + ".txt")) as f:
+    with open(FILE_PATH.joinpath(file_name[-7:-3] + ".txt")) as f:
         lines = f.read().splitlines()
 
     return lines
