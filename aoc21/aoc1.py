@@ -1,9 +1,8 @@
 from utils import get_data
 
-
 DEBUG = False
 
-lines = get_data(DEBUG)
+data = get_data(__file__[-7:-3], DEBUG)
 
 
 def sol_1():
