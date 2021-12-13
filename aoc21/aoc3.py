@@ -87,8 +87,6 @@ def sol_2():
         gamma = get_gamma("", o2_data)
         episoln = get_episoln("", co2_data)
 
-        print(co2_data, gamma, episoln, i)
-
         if gamma == "1":
             for j in range(len(o2_data)):
                 if o2_data[j][i] != gamma:
@@ -127,13 +125,10 @@ def sol_2():
 
         if len(o2_data) == 1:
             o2 = o2_data.pop(0)
-            print("here")
 
         if len(co2_data) == 1:
             co2 = co2_data.pop(0)
-            print("here")
 
-    print(o2, co2)
     return int(o2, 2) * int(co2, 2)
 
 
