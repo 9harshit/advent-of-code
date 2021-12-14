@@ -68,9 +68,9 @@ def sol_2():
     matrix = []
     for line in coords:
         if (
-            abs(line[0][0] - line[1][0])
-            == abs(line[0][1] - line[1][1])
-            # or (abs(line[0][0] - line[0][1]) == abs(line[1][0] - line[1][1]))
+            (line[0][0] == line[1][0])
+            or (line[0][1] == line[1][1])
+            or (abs(line[0][0] - line[1][0]) == abs(line[0][1] - line[1][1]))
         ):
 
             pts = []
