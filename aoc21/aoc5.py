@@ -100,5 +100,5 @@ def sol_2():
     return count
 
 
-print(sol_1())
+# print(sol_1())
 print(sol_2())
