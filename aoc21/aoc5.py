@@ -2,14 +2,12 @@ import numpy as np
 from utils import get_data
 
 DEBUG = False
-
-data = get_data(__file__, DEBUG)
-
-
 coords = []
 
 min_x, min_y = 9999, 9999
 max_x, max_y = -999, -999
+
+data = get_data(__file__, DEBUG)s
 
 
 for pts in data:
