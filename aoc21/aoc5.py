@@ -1,3 +1,5 @@
+from collections import Counter
+
 import numpy as np
 from utils import get_data
 
@@ -5,9 +7,59 @@ DEBUG = False
 coords = []
 
 min_x, min_y = 9999, 9999
-max_x, max_y = -999, -999
+max_x, max_y = -9999, -9999
 
-data = get_data(__file__, DEBUG)s
+data = get_data(__file__, DEBUG)
+
+
+def add_to_matrix(pts, matrix):
+    pts = list(set(pts))
+    matrix += pts
+    return matrix
+
+
+def get_points(matrix, line, diagonals=False):
+
+    pts = []
+
+    if (line[0][0] == line[1][0]) or (line[0][1] == line[1][1]):
+
+        # create the points
+        ys = np.linspace(line[0][1], line[1][1], max_y + max_x)
+
+        xs = np.linspace(line[0][0], line[1][0], max_x + max_y)
+
+        # print them
+        for i in range(max_x + max_y):
+            pts.append((int(xs[i]), int(ys[i])))
+
+    elif abs(line[0][0] - line[1][0]) == abs(line[0][1] - line[1][1]) and diagonals:
+        if line[0][0] > line[1][0]:
+            line[0][0], line[0][1], line[1][0], line[1][1] = (
+                line[1][0],
+                line[1][1],
+                line[0][0],
+                line[0][1],
+            )
+        slope = (line[1][1] - line[0][1]) // (line[1][0] - line[0][0])
+        for i, j in zip(
+            range(line[0][0], line[1][0]),
+            range(line[0][1], line[1][1], slope),
+        ):
+            pts.append((i, j))
+
+    return add_to_matrix(pts, matrix)
+
+
+def get_count_pts(matrix):
+    d = Counter(matrix)
+
+    count = 0
+    for x in d.items():
+        if x[1] >= 2:
+            count += 1
+
+    return count
 
 
 for pts in data:
@@ -33,70 +85,18 @@ for pts in data:
 def sol_1():
     matrix = []
     for line in coords:
-        if (line[0][0] == line[1][0]) or (line[0][1] == line[1][1]):
+        matrix = get_points(matrix, line, diagonals=False)
 
-            pts = []
-
-            # create the points
-            ys = np.linspace(line[0][1], line[1][1], max_y + max_x)
-
-            xs = np.linspace(line[0][0], line[1][0], max_x + max_y)
-
-            # print them
-            for i in range(max_x + max_y):
-
-                pts.append((int(xs[i]), int(ys[i])))
-
-            pts = list(set(pts))
-            matrix += pts
-
-    from collections import Counter
-
-    d = Counter(matrix)
-
-    count = 0
-    for x in d.items():
-        if x[1] >= 2:
-            count += 1
-
-    return count
+    return get_count_pts(matrix)
 
 
 def sol_2():
     matrix = []
     for line in coords:
-        if (
-            (line[0][0] == line[1][0])
-            or (line[0][1] == line[1][1])
-            or (abs(line[0][0] - line[1][0]) == abs(line[0][1] - line[1][1]))
-        ):
+        matrix = get_points(matrix, line, diagonals=True)
 
-            pts = []
-
-            # create the points
-            ys = np.linspace(line[0][1], line[1][1], max_y + max_x)
-
-            xs = np.linspace(line[0][0], line[1][0], max_x + max_y)
-
-            # print them
-            for i in range(max_x + max_y):
-
-                pts.append((int(xs[i]), int(ys[i])))
-
-            pts = list(set(pts))
-            matrix += pts
-
-    from collections import Counter
-
-    d = Counter(matrix)
-
-    count = 0
-    for x in d.items():
-        if x[1] >= 2:
-            count += 1
-
-    return count
+    return get_count_pts(matrix)
 
 
-# print(sol_1())
+print(sol_1())
 print(sol_2())
