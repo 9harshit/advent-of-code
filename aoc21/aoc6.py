@@ -10,7 +10,7 @@ def get_total_fish(data):
 
     original_fish = len(data)
 
-    for day in range(80):
+    for day in range(256):
         for fish in range(len(data)):
             if data[fish] == 0:
                 data.append(8)
@@ -29,4 +29,18 @@ def get_total_fish(data):
     #     return 1
 
 
-print(get_total_fish(data))
+# print(get_total_fish(data))
+"""
+Not my solution, but it works.
+days = [0] * 9
+# Update the current numbers
+for fish in data:
+    days[fish] += 1
+for i in range(256):
+    # To make it cyclic: 0, 1, 2, 3, 4, 5, 6, 7, 8
+    today = i % len(days)
+    # Add new babies
+    days[(today + 7) % len(days)] += days[today]
+print(f"Total lanternfish after 256 days: {sum(days)}")
+
+"""
